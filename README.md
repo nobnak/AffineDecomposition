@@ -1,5 +1,5 @@
-# AffineDecomposition
-TRS Decomposition for Unity
+# Affine Decomposition
+A decomposition algorithm of Affine transform matrix for animation interpolation for Unity
 
 ## Example
 
