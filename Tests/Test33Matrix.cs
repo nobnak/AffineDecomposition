@@ -1,3 +1,5 @@
+using AffineDecomposition.Extensions;
+using AffineDecomposition.Model;
 using NUnit.Framework;
 using Unity.Mathematics;
 using Unity.PerformanceTesting;
@@ -77,6 +79,21 @@ namespace AffineDecomposition.Tests {
             rot.AreEqual(trs.rotate);
             float3x3.Scale(sc).AreEqual(trs.stretch);
         }
+
+        [Test]
+        public void TestAffineTransform() {
+            var tr = new float3(1, -2, 3);
+            var rt = quaternion.EulerXYZ(0f, 0f, 0.5f * math.PI);
+            var sc = float3x3.Scale(1, 10, 100);
+            var a = new AffineTransform(tr, rt, sc);
+
+            var a34 = a.ToFloat3x4();
+            math.mul(new float3x3(rt), sc).AreEqual(new float3x3(a34.c0, a34.c1, a34.c2));
+            tr.AreEqual(a34.c3);
+
+            var a44 = a.ToFloat4x4();
+            new float4(0, 0, 0, 1).AreEqual(new float4(a44[0][3], a44[1][3], a44[2][3], a44[3][3]));
+        }
     }
 
     public static class TestUtils {
@@ -97,5 +114,6 @@ namespace AffineDecomposition.Tests {
                 for (var y = 0; y < 3; y++)
                     a[x].AreEqual(b[x], 1e-3f);
         }
+        
     }
 }

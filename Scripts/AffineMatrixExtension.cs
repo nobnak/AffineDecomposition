@@ -9,7 +9,7 @@ namespace AffineDecomposition {
     public static class AffineMatrixExtension {
         public const float SIGMA = 10f * float.Epsilon;
 
-        public static TRSDecompositionResult DecomposeToTRS(this float3x4 Affine) {
+        public static AffineTransform DecomposeToTRS(this float3x4 Affine) {
             var translate = Affine.c3;
             
             var A = new float3x3(Affine.c0, Affine.c1, Affine.c2);
@@ -17,7 +17,7 @@ namespace AffineDecomposition {
 
             var rotate = math.quaternion(polar.U);
             var stretch = polar.H;
-            return new TRSDecompositionResult(translate, rotate, stretch);
+            return new AffineTransform(translate, rotate, stretch);
         }
 
         //Higham, N.J.Computing the Polar Decomposition—with Applications.Siam J Sci Stat Comp 7, 1160–1174 (1986).

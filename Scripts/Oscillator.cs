@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace AffineDecomposition.Examples {
 
+    [ExecuteAlways]
     public class Oscillator : MonoBehaviour {
         public const float TWO_PI = 2f * Mathf.PI;
 
@@ -12,20 +13,23 @@ namespace AffineDecomposition.Examples {
         private void Update() {
             var t = Time.realtimeSinceStartup;
 
-            transform.localPosition = Vector3.Lerp(
-                tuner.translateFrom, 
-                tuner.translateTo, 
-                Oscilate(tuner.translateOsc * t));
+            if (tuner.translateOsc > 0)
+                transform.localPosition = Vector3.Lerp(
+                    tuner.translateFrom, 
+                    tuner.translateTo, 
+                    Oscilate(tuner.translateOsc * t));
 
-            transform.localRotation = Quaternion.Euler(Vector3.Lerp(
-                tuner.rotateFrom, 
-                tuner.rotateTo, 
-                Oscilate(tuner.rotateOsc * t)));
+            if (tuner.rotateOsc > 0)
+                transform.localRotation = Quaternion.Euler(Vector3.Lerp(
+                    tuner.rotateFrom, 
+                    tuner.rotateTo, 
+                    Oscilate(tuner.rotateOsc * t)));
 
-            transform.localScale = Vector3.Lerp(
-                tuner.scaleFrom, 
-                tuner.scaleTo, 
-                Oscilate(t * tuner.scaleOsc));
+            if (tuner.scaleOsc > 0)
+                transform.localScale = Vector3.Lerp(
+                    tuner.scaleFrom, 
+                    tuner.scaleTo, 
+                    Oscilate(t * tuner.scaleOsc));
         }
 
         public static float Oscilate(float t) {
