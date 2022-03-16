@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace AffineDecomposition.Model {
 
-    public struct AffineTransform {
+    public struct Affine {
         public readonly float3 translate;
         public readonly quaternion rotate;
         public readonly float3x3 stretch;
 
-        public AffineTransform(float3 translate, quaternion rotate, float3x3 stretch) {
+        public Affine(float3 translate, quaternion rotate, float3x3 stretch) {
             this.translate = translate;
             this.rotate = rotate;
             this.stretch = stretch;
@@ -31,11 +31,13 @@ namespace AffineDecomposition.Model {
                 math.lerp(a.c2, b.c2, t)
                 );
 
-        public static AffineTransform Lerp(AffineTransform a, AffineTransform b, float t)
-            => new AffineTransform(
+        public static Affine Lerp(Affine a, Affine b, float t)
+            => new Affine(
                 math.lerp(a.translate, b.translate, t),
                 math.slerp(a.rotate, b.rotate, t),
                 Lerp(a.stretch, b.stretch, t));
+
+        public static implicit operator Matrix4x4 (Affine a) => a.ToFloat4x4();
         #endregion
 
         #endregion

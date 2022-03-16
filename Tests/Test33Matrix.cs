@@ -1,4 +1,3 @@
-using AffineDecomposition.Extensions;
 using AffineDecomposition.Model;
 using NUnit.Framework;
 using Unity.Mathematics;
@@ -74,7 +73,7 @@ namespace AffineDecomposition.Tests {
             var Linear = math.mul(new float3x3(rot), float3x3.Scale(sc));
             var Affine = new float3x4(Linear.c0, Linear.c1, Linear.c2, tr);
 
-            var trs = Affine.DecomposeToTRS();
+            var trs = Affine.Decompose();
             tr.AreEqual(trs.translate);
             rot.AreEqual(trs.rotate);
             float3x3.Scale(sc).AreEqual(trs.stretch);
@@ -85,7 +84,7 @@ namespace AffineDecomposition.Tests {
             var tr = new float3(1, -2, 3);
             var rt = quaternion.EulerXYZ(0f, 0f, 0.5f * math.PI);
             var sc = float3x3.Scale(1, 10, 100);
-            var a = new AffineTransform(tr, rt, sc);
+            var a = new Affine(tr, rt, sc);
 
             var a34 = a.ToFloat3x4();
             math.mul(new float3x3(rt), sc).AreEqual(new float3x3(a34.c0, a34.c1, a34.c2));
@@ -93,6 +92,42 @@ namespace AffineDecomposition.Tests {
 
             var a44 = a.ToFloat4x4();
             new float4(0, 0, 0, 1).AreEqual(new float4(a44[0][3], a44[1][3], a44[2][3], a44[3][3]));
+        }
+
+        [Test]
+        public void TestMatrix4x4() {
+            var m0 = new float4x4(
+                math.mul(new float3x3(quaternion.Euler(0f, 0f, 0.25f * math.PI)), float3x3.Scale(5, 5, 5)),
+                new float3(0));
+            var m1 = new float4x4(
+                math.mul(new float3x3(quaternion.Euler(0.5f * math.PI, 0, 0)), float3x3.Scale(0.1f, 0.1f, 0.1f)),
+                new float3(0));
+            var m = m0 * m1;
+            m = new float4x4(float3x3.identity, new float3(0, 0, -20)) * m;
+
+            var m34 = m.ToFloat3x4();
+            var a = m34.Decompose();
+
+            m.AreEqual(a.ToFloat4x4());
+        }
+
+        [Test]
+        public void TestRealMatrix() {
+            var m = new float4x4(
+                -0.14470f, -0.43141f, -0.20724f, -4.21905f,
+                -0.36829f, 0.23863f, -0.23962f, -2.59345f,
+                0.30566f, 0.08330f, -0.38683f, 0.36567f,
+                0.00000f, 0.00000f, 0.00000f, 1.00000f);
+            var v = new float4x4(
+                1.00000f, 0.00000f, 0.00000f, 0.00000f,
+                0.00000f, 1.00000f, 0.00000f, 0.00000f,
+                0.00000f, 0.00000f, 1.00000f, -20.00000f,
+                0.00000f, 0.00000f, 0.00000f, 1.00000f);
+
+            var mv = math.mul(v, m);
+
+            var a = mv.ToFloat3x4().Decompose();
+            mv.AreEqual(a.ToFloat4x4());
         }
     }
 
@@ -114,6 +149,11 @@ namespace AffineDecomposition.Tests {
                 for (var y = 0; y < 3; y++)
                     a[x].AreEqual(b[x], 1e-3f);
         }
-        
+        public static void AreEqual(this float4x4 a, float4x4 b) {
+            for (var x = 0; x < 4; x++)
+                for (var y = 0; y < 4; y++)
+                    a[x].AreEqual(b[x], 1e-3f);
+        }
+
     }
 }

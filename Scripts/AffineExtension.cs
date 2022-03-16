@@ -6,18 +6,18 @@ using UnityEngine;
 
 namespace AffineDecomposition {
 
-    public static class AffineMatrixExtension {
+    public static class AffineExtension {
         public const float SIGMA = 10f * float.Epsilon;
 
-        public static AffineTransform DecomposeToTRS(this float3x4 Affine) {
-            var translate = Affine.c3;
+        public static Affine Decompose(this float3x4 m) {
+            var translate = m.c3;
             
-            var A = new float3x3(Affine.c0, Affine.c1, Affine.c2);
+            var A = new float3x3(m.c0, m.c1, m.c2);
             var polar = A.PolarDecompose();
 
             var rotate = math.quaternion(polar.U);
             var stretch = polar.H;
-            return new AffineTransform(translate, rotate, stretch);
+            return new Affine(translate, rotate, stretch);
         }
 
         //Higham, N.J.Computing the Polar Decomposition—with Applications.Siam J Sci Stat Comp 7, 1160–1174 (1986).
@@ -96,6 +96,21 @@ namespace AffineDecomposition {
             return math.transpose(m).Norm_1();
         }
 
-        public static Vector4 ToVector4(this Quaternion q) => new Vector4(q.x, q.y, q.z, q.w);
+        public static Vector4 ToVector4(this Quaternion q) => new Vector4(q.x, q.y, q.z, q.w); 
+        
+        public static float3x4 ToFloat3x4(this Affine af) {
+            var rs = math.mul(new float3x3(af.rotate), af.stretch);
+            return new float3x4(rs.c0, rs.c1, rs.c2, af.translate);
+        }
+        public static float4x4 ToFloat4x4(this Affine af) {
+            var rs = math.mul(new float3x3(af.rotate), af.stretch);
+            return new float4x4(rs, af.translate);
+        }
+
+        public static float3x4 ToFloat3x4(this float4x4 m)
+            => new float3x4(m.c0.xyz, m.c1.xyz, m.c2.xyz, m.c3.xyz);
+
+        public static float3 Diag(this float3x3 m)
+            => new float3(m[0][0], m[1][1], m[2][2]);
     }
 }

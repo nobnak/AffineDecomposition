@@ -13,7 +13,7 @@ namespace AffineDecomposition.Examples {
 
         void Update() {
             var m = (float4x4)transform.localToWorldMatrix;
-            var trs = new float3x4(m.c0.xyz, m.c1.xyz, m.c2.xyz, m.c3.xyz).DecomposeToTRS();
+            var trs = new float3x4(m.c0.xyz, m.c1.xyz, m.c2.xyz, m.c3.xyz).Decompose();
 
             var pos = trs.translate;
             var rot = trs.rotate;

@@ -1,6 +1,4 @@
-using AffineDecomposition.Extensions;
 using AffineDecomposition.Model;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -23,13 +21,13 @@ namespace AffineDecomposition.Examples {
             var trFrom = link.keys[i];
             var trTo = link.keys[(i + 1) % link.keys.Count];
 
-            var exFrom = ((float4x4)(trFrom.localToWorldMatrix)).Tofloat3x4();
-            var afrom = exFrom.DecomposeToTRS();
+            var exFrom = ((float4x4)(trFrom.localToWorldMatrix)).ToFloat3x4();
+            var afrom = exFrom.Decompose();
 
-            var exTo = ((float4x4)(trTo.localToWorldMatrix)).Tofloat3x4();
-            var ato = exTo.DecomposeToTRS();
+            var exTo = ((float4x4)(trTo.localToWorldMatrix)).ToFloat3x4();
+            var ato = exTo.Decompose();
 
-            var ainterp = AffineTransform.Lerp(afrom, ato, t0);
+            var ainterp = Affine.Lerp(afrom, ato, t0);
             transform.position = ainterp.translate;
             transform.rotation = ainterp.rotate;
             transform.localScale = ainterp.stretch.Diag();
