@@ -6,10 +6,20 @@ By decomposing Model View matrix into translation, rotation, scaling factors, in
 
 Decompose Model View matrix is factored into translate/rotate/scale as Affine.
 ```csharp
-var decomposed = (Affine)(Matrix4x4.Scale(new Vector3(1f, 1f, -1f) * Camera.main.worldToCameraMatrix * transform.localToWorldMatrix;
+var decomposed = (Affine)(Matrix4x4.Scale(new Vector3(1f, 1f, -1f) 
+  * Camera.main.worldToCameraMatrix 
+  * transform.localToWorldMatrix;
 ```
 
+Affine matrix can be simply interpolated by Lerp() function.
+```csharp
+var interpolated = Affine.Lerp(keyFrame0, keyFrame1, t);
+```
 
+Affine can be converted into Matrix4x4.
+```csharp
+var modelView = (Matrix4x4)interpolated;
+```
 
 ## Demo
 [![Demo](http://img.youtube.com/vi/UtXhv53DYkI/maxresdefault.jpg)](https://youtu.be/UtXhv53DYkI)
