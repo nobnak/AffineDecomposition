@@ -10,10 +10,15 @@ namespace AffineDecomposition.Examples {
         public Link link = new Link();
         public Tuner tuner = new Tuner();
 
+        Affine ainterp;
+
+        private void OnEnable() {
+            ainterp = (Affine)link.keys[0].localToWorldMatrix;
+        }
         private void Update() {
             if (link.keys.Count < 2) return;
 
-            var t = tuner.speed * Time.realtimeSinceStartup;
+            var t = Time.time * tuner.speed;
 
             var it = (int)t;
             var t0 = Mathf.Clamp01(t - it);
@@ -21,13 +26,15 @@ namespace AffineDecomposition.Examples {
             var trFrom = link.keys[i];
             var trTo = link.keys[(i + 1) % link.keys.Count];
 
-            var exFrom = ((float4x4)(trFrom.localToWorldMatrix)).ToFloat3x4();
-            var afrom = exFrom.Decompose();
+            var afrom = (Affine)trFrom.localToWorldMatrix;
+            var ato = (Affine)trTo.localToWorldMatrix;
+            
+            var cfrom = trFrom.GetComponent<Renderer>().sharedMaterial.color;
+            var cto = trTo.GetComponent<Renderer>().sharedMaterial.color;
+            var cinterp = Color.Lerp(cfrom, cto, t0);
+            GetComponent<Renderer>().sharedMaterial.color = cinterp;
 
-            var exTo = ((float4x4)(trTo.localToWorldMatrix)).ToFloat3x4();
-            var ato = exTo.Decompose();
-
-            var ainterp = Affine.Lerp(afrom, ato, t0);
+            ainterp = Affine.Lerp(afrom, ato, t0);
             transform.position = ainterp.translate;
             transform.rotation = ainterp.rotate;
             transform.localScale = ainterp.stretch.Diag();
