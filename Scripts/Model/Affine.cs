@@ -37,7 +37,11 @@ namespace AffineDecomposition.Model {
                 math.slerp(a.rotate, b.rotate, t),
                 Lerp(a.stretch, b.stretch, t));
 
-        public static implicit operator Matrix4x4 (Affine a) => a.ToFloat4x4();
+        public static implicit operator float4x4 (Affine a) => a.ToFloat4x4();
+        public static explicit operator Affine (float4x4 m) => m.ToFloat3x4().Decompose();
+
+        public static implicit operator Matrix4x4(Affine a) => (float4x4)a;
+        public static explicit operator Affine (Matrix4x4 m) => (Affine)(float4x4)m;
         #endregion
 
         #endregion
