@@ -22,7 +22,7 @@ var modelView = (Matrix4x4)interpolated;
 ```
 
 ## Demo
-[![Demo](http://img.youtube.com/vi/tZ3TyIUie3A/maxresdefault.jpg)](https://youtu.be/tZ3TyIUie3A)
+[![Demo](http://img.youtube.com/vi/tZ3TyIUie3A/sddefault.jpg)](https://youtu.be/tZ3TyIUie3A)
 [![Demo](http://img.youtube.com/vi/UtXhv53DYkI/maxresdefault.jpg)](https://youtu.be/UtXhv53DYkI)
 
 ## References
