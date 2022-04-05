@@ -4,6 +4,7 @@ By decomposing Model View matrix into translation, rotation, scaling factors, in
 
 > ![Direct Matrix Interpolation](DirectMatrixInterpolationFig02.png)
 > ![Polar Decomposed Matrix Interpolation](PolarDecomposedMatrixInterpolationFig06.png)
+
 Images from Ref. 1
 
 ## Example
