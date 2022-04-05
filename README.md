@@ -2,10 +2,11 @@
 A decomposition algorithm of Affine transform matrix for animation interpolation for Unity.
 By decomposing Model View matrix into translation, rotation, scaling factors, interpolated matrix of two key matrices protec its scale from rotation.
 
-> ![Direct Matrix Interpolation](DirectMatrixInterpolationFig02.png)
-> ![Polar Decomposed Matrix Interpolation](PolarDecomposedMatrixInterpolationFig06.png)
-
 Images from Ref. 1
+> ![Direct Matrix Interpolation](DirectMatrixInterpolationFig02_s.png)
+> ![Polar Decomposed Matrix Interpolation](PolarDecomposedMatrixInterpolationFig06_s.png)
+- Left: 2 Matrices are interpolated
+- Right: Matrices are decomposed into Translate/Rotate/Scale facters then interpolate it
 
 ## Example
 
