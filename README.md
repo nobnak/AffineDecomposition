@@ -5,7 +5,7 @@ By decomposing Model View matrix into translation, rotation, scaling factors, in
 Images from Ref. 1
 > ![Direct Matrix Interpolation](DirectMatrixInterpolationFig02_s.png)
 > ![Polar Decomposed Matrix Interpolation](PolarDecomposedMatrixInterpolationFig06_s.png)
-- Left: 2 Matrices are interpolated
+- Left: Matrices are interpolated
 - Right: Matrices are decomposed into Translate/Rotate/Scale facters then interpolate it
 
 ## Example
